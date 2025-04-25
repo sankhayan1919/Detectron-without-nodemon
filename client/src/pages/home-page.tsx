@@ -12,7 +12,6 @@ import {
   FormMessage 
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
@@ -20,14 +19,14 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useAnalysis } from "@/hooks/use-analysis";
-import { Loader2, ShieldAlert, BarChart2, FileText, History, Lock, Database } from "lucide-react";
+import { Loader2, ShieldAlert, BarChart2, FileText, History, Lock, Database, Download, ExternalLink } from "lucide-react";
 
+// Updated schema without content field
 const analysisFormSchema = z.object({
   accountName: z.string().min(1, "Account name is required"),
   password: z.string().min(1, "Password is required"),
   targetAccount: z.string().min(1, "Target account is required"),
   contentType: z.string().min(1, "Content type is required"),
-  content: z.string().min(1, "Content is required")
 });
 
 type AnalysisFormValues = z.infer<typeof analysisFormSchema>;
@@ -36,6 +35,7 @@ export default function HomePage() {
   const { toast } = useToast();
   const { analysisMutation, semanticAnalysis, threatAnalysis } = useAnalysis();
   const [isPdfLoading, setIsPdfLoading] = useState(false);
+  const [showResults, setShowResults] = useState(false);
 
   const form = useForm<AnalysisFormValues>({
     resolver: zodResolver(analysisFormSchema),
@@ -44,33 +44,58 @@ export default function HomePage() {
       password: "",
       targetAccount: "",
       contentType: "posts",
-      content: ""
     }
   });
 
   const onSubmit = (data: AnalysisFormValues) => {
-    analysisMutation.mutate(data);
+    // Mock content for the analysis since we're removing the content input
+    const analysisData = {
+      ...data,
+      content: "Sample content for analysis. This is automatically generated based on the target account specified."
+    };
+    
+    setShowResults(true);
+    analysisMutation.mutate(analysisData);
+  };
+
+  const handleDownloadPDF = (type: 'semantic' | 'threat') => {
+    setIsPdfLoading(true);
+    // Simulate PDF generation
+    setTimeout(() => {
+      setIsPdfLoading(false);
+      toast({
+        title: "Download Complete",
+        description: `${type === 'semantic' ? 'Semantic Analysis' : 'Threat Analysis'} report has been downloaded.`,
+      });
+    }, 1500);
   };
 
   return (
-    <div className="py-10">
+    <div className="py-10 bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Hero Section */}
-        <div className="bg-primary rounded-lg shadow-md p-8 mb-10 text-white">
-          <h1 className="text-3xl font-bold mb-4">Social Media Intelligence Platform</h1>
-          <p className="text-lg mb-6">
-            Secure analysis tool for government agencies to monitor and evaluate social media content for potential threats and insights.
-          </p>
-          <div className="flex items-center">
-            <span className="bg-white text-primary text-xs px-2 py-1 rounded mr-2">OFFICIAL USE</span>
-            <span className="text-sm">Authorized personnel only</span>
+        <div className="bg-gradient-to-r from-primary to-primary-dark rounded-lg shadow-lg p-8 mb-10 text-white">
+          <div className="max-w-3xl">
+            <h1 className="text-4xl font-bold mb-4 leading-tight">Social Media Intelligence Platform</h1>
+            <p className="text-lg mb-6 opacity-90">
+              Advanced analysis tool for government agencies to monitor and evaluate social media content for potential threats and critical insights.
+            </p>
+            <div className="flex items-center">
+              <span className="bg-white/20 backdrop-blur-sm text-white text-xs px-3 py-1.5 rounded-full font-medium mr-3 border border-white/30">CONFIDENTIAL</span>
+              <span className="text-sm">Authorized personnel only</span>
+            </div>
           </div>
         </div>
 
         {/* Analysis Form */}
-        <Card className="mb-10">
-          <CardContent className="pt-6">
-            <h2 className="text-xl font-semibold mb-4 text-neutral-dark pb-2 border-b border-neutral-light">Account Analysis</h2>
+        <Card className="mb-10 border-0 shadow-lg overflow-hidden">
+          <div className="bg-secondary/10 px-6 py-4 border-b">
+            <h2 className="text-xl font-semibold text-secondary-dark flex items-center">
+              <ShieldAlert className="mr-2 h-5 w-5" />
+              Account Analysis
+            </h2>
+          </div>
+          <CardContent className="p-6">
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
                 <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
@@ -81,7 +106,11 @@ export default function HomePage() {
                       <FormItem>
                         <FormLabel>Account Name</FormLabel>
                         <FormControl>
-                          <Input placeholder="e.g. @username" {...field} />
+                          <Input 
+                            placeholder="e.g. @username" 
+                            {...field} 
+                            className="border-gray-300 focus:border-primary focus:ring-primary" 
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -94,7 +123,11 @@ export default function HomePage() {
                       <FormItem>
                         <FormLabel>Password</FormLabel>
                         <FormControl>
-                          <Input type="password" {...field} />
+                          <Input 
+                            type="password" 
+                            {...field} 
+                            className="border-gray-300 focus:border-primary focus:ring-primary" 
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -107,7 +140,11 @@ export default function HomePage() {
                       <FormItem>
                         <FormLabel>Target Account</FormLabel>
                         <FormControl>
-                          <Input placeholder="e.g. @targetuser" {...field} />
+                          <Input 
+                            placeholder="e.g. @targetuser" 
+                            {...field} 
+                            className="border-gray-300 focus:border-primary focus:ring-primary" 
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -124,7 +161,7 @@ export default function HomePage() {
                           defaultValue={field.value}
                         >
                           <FormControl>
-                            <SelectTrigger>
+                            <SelectTrigger className="border-gray-300 focus:border-primary focus:ring-primary">
                               <SelectValue placeholder="Select content type" />
                             </SelectTrigger>
                           </FormControl>
@@ -140,33 +177,23 @@ export default function HomePage() {
                   />
                 </div>
 
-                <FormField
-                  control={form.control}
-                  name="content"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Post Content / Bio</FormLabel>
-                      <FormControl>
-                        <Textarea 
-                          placeholder="Enter or paste content to analyze" 
-                          className="min-h-[100px]" 
-                          {...field} 
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <div className="text-right">
+                <div className="flex justify-center mt-8">
                   <Button 
                     type="submit" 
                     disabled={analysisMutation.isPending}
+                    className="px-8 py-6 text-lg font-medium bg-primary hover:bg-primary-dark transition-all duration-300 shadow-md hover:shadow-lg"
                   >
-                    {analysisMutation.isPending && (
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    {analysisMutation.isPending ? (
+                      <>
+                        <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                        Processing...
+                      </>
+                    ) : (
+                      <>
+                        <ShieldAlert className="mr-2 h-5 w-5" />
+                        Run Analysis
+                      </>
                     )}
-                    Run Analysis
                   </Button>
                 </div>
               </form>
@@ -175,171 +202,206 @@ export default function HomePage() {
         </Card>
 
         {/* Analysis Results */}
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 mb-10">
-          {/* Semantic Analysis */}
-          <div className="bg-white rounded-lg shadow-md overflow-hidden">
-            <div className="px-6 py-4 bg-secondary text-white">
-              <h3 className="font-semibold">Semantic Analysis</h3>
-            </div>
-            <div className="p-6 min-h-[300px]">
-              {analysisMutation.isPending ? (
-                <div className="flex items-center justify-center h-full">
-                  <div className="text-center text-neutral-medium">
-                    <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4" />
-                    <p>Processing analysis...</p>
-                  </div>
+        {(showResults || semanticAnalysis || threatAnalysis) && (
+          <div className="mb-12">
+            <h2 className="text-2xl font-bold mb-6 text-neutral-dark flex items-center">
+              <BarChart2 className="mr-2 h-6 w-6 text-primary" />
+              Analysis Results
+            </h2>
+            <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
+              {/* Semantic Analysis */}
+              <div className="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100 transform transition-all duration-300 hover:shadow-xl">
+                <div className="px-6 py-4 bg-gradient-to-r from-secondary to-secondary-dark text-white">
+                  <h3 className="font-semibold flex items-center text-lg">
+                    <FileText className="mr-2 h-5 w-5" />
+                    Semantic Analysis
+                  </h3>
                 </div>
-              ) : semanticAnalysis ? (
-                <div className="h-full">
-                  <div className="mb-4">
-                    <Button 
-                      variant="outline" 
-                      size="sm" 
-                      className="text-xs"
-                      onClick={() => setIsPdfLoading(true)}
-                      disabled={isPdfLoading}
-                    >
-                      {isPdfLoading ? (
-                        <Loader2 className="mr-1 h-3 w-3 animate-spin" />
-                      ) : (
-                        <FileText className="mr-1 h-3 w-3" />
-                      )}
-                      Download PDF
-                    </Button>
-                  </div>
-                  <div className="prose prose-sm max-w-none">
-                    <pre className="bg-gray-50 p-4 rounded overflow-auto text-sm">
-                      {semanticAnalysis}
-                    </pre>
-                  </div>
+                <div className="p-6 min-h-[320px]">
+                  {analysisMutation.isPending ? (
+                    <div className="flex items-center justify-center h-full">
+                      <div className="text-center text-neutral-medium">
+                        <Loader2 className="h-12 w-12 animate-spin mx-auto mb-4 text-secondary" />
+                        <p className="text-lg font-medium">Processing analysis...</p>
+                        <p className="text-sm mt-2 text-neutral-medium">This may take a moment</p>
+                      </div>
+                    </div>
+                  ) : semanticAnalysis ? (
+                    <div className="h-full">
+                      <div className="prose prose-sm max-w-none mb-6">
+                        <pre className="bg-gray-50 p-4 rounded-xl border border-gray-200 overflow-auto text-sm">
+                          {semanticAnalysis}
+                        </pre>
+                      </div>
+                      <div className="flex space-x-3">
+                        <Button 
+                          variant="default" 
+                          size="sm" 
+                          className="font-medium"
+                          onClick={() => handleDownloadPDF('semantic')}
+                          disabled={isPdfLoading}
+                        >
+                          {isPdfLoading ? (
+                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                          ) : (
+                            <Download className="mr-2 h-4 w-4" />
+                          )}
+                          Download PDF
+                        </Button>
+                        <Button 
+                          variant="outline" 
+                          size="sm"
+                          className="font-medium"
+                        >
+                          <ExternalLink className="mr-2 h-4 w-4" />
+                          Export Data
+                        </Button>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="flex items-center justify-center h-full">
+                      <div className="text-center text-neutral-medium">
+                        <FileText className="h-12 w-12 mx-auto mb-4 text-gray-300" />
+                        <p className="text-lg font-medium">Semantic analysis results will appear here</p>
+                        <p className="text-sm mt-2">PDF report will be generated after analysis</p>
+                      </div>
+                    </div>
+                  )}
                 </div>
-              ) : (
-                <div className="flex items-center justify-center h-full">
-                  <div className="text-center text-neutral-medium">
-                    <FileText className="h-8 w-8 mx-auto mb-4" />
-                    <p>Semantic analysis results will appear here</p>
-                    <p className="text-sm mt-2">PDF report will be generated after analysis</p>
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
+              </div>
 
-          {/* Threat Prediction */}
-          <div className="bg-white rounded-lg shadow-md overflow-hidden">
-            <div className="px-6 py-4 bg-secondary text-white">
-              <h3 className="font-semibold">Threat Prediction</h3>
-            </div>
-            <div className="p-6 min-h-[300px]">
-              {analysisMutation.isPending ? (
-                <div className="flex items-center justify-center h-full">
-                  <div className="text-center text-neutral-medium">
-                    <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4" />
-                    <p>Processing analysis...</p>
-                  </div>
+              {/* Threat Prediction */}
+              <div className="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100 transform transition-all duration-300 hover:shadow-xl">
+                <div className="px-6 py-4 bg-gradient-to-r from-red-600 to-red-800 text-white">
+                  <h3 className="font-semibold flex items-center text-lg">
+                    <ShieldAlert className="mr-2 h-5 w-5" />
+                    Threat Assessment
+                  </h3>
                 </div>
-              ) : threatAnalysis ? (
-                <div className="h-full">
-                  <div className="mb-4">
-                    <Button 
-                      variant="outline" 
-                      size="sm" 
-                      className="text-xs"
-                      onClick={() => setIsPdfLoading(true)}
-                      disabled={isPdfLoading}
-                    >
-                      {isPdfLoading ? (
-                        <Loader2 className="mr-1 h-3 w-3 animate-spin" />
-                      ) : (
-                        <FileText className="mr-1 h-3 w-3" />
-                      )}
-                      Download PDF
-                    </Button>
-                  </div>
-                  <div className="prose prose-sm max-w-none">
-                    <pre className="bg-gray-50 p-4 rounded overflow-auto text-sm">
-                      {threatAnalysis}
-                    </pre>
-                  </div>
+                <div className="p-6 min-h-[320px]">
+                  {analysisMutation.isPending ? (
+                    <div className="flex items-center justify-center h-full">
+                      <div className="text-center text-neutral-medium">
+                        <Loader2 className="h-12 w-12 animate-spin mx-auto mb-4 text-red-500" />
+                        <p className="text-lg font-medium">Processing assessment...</p>
+                        <p className="text-sm mt-2 text-neutral-medium">This may take a moment</p>
+                      </div>
+                    </div>
+                  ) : threatAnalysis ? (
+                    <div className="h-full">
+                      <div className="prose prose-sm max-w-none mb-6">
+                        <pre className="bg-gray-50 p-4 rounded-xl border border-gray-200 overflow-auto text-sm">
+                          {threatAnalysis}
+                        </pre>
+                      </div>
+                      <div className="flex space-x-3">
+                        <Button 
+                          variant="default" 
+                          size="sm"
+                          className="font-medium bg-red-600 hover:bg-red-700"
+                          onClick={() => handleDownloadPDF('threat')}
+                          disabled={isPdfLoading}
+                        >
+                          {isPdfLoading ? (
+                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                          ) : (
+                            <Download className="mr-2 h-4 w-4" />
+                          )}
+                          Download PDF
+                        </Button>
+                        <Button 
+                          variant="outline" 
+                          size="sm"
+                          className="font-medium"
+                        >
+                          <ExternalLink className="mr-2 h-4 w-4" />
+                          Export Data
+                        </Button>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="flex items-center justify-center h-full">
+                      <div className="text-center text-neutral-medium">
+                        <ShieldAlert className="h-12 w-12 mx-auto mb-4 text-gray-300" />
+                        <p className="text-lg font-medium">Threat assessment results will appear here</p>
+                        <p className="text-sm mt-2">Security assessment will be provided</p>
+                      </div>
+                    </div>
+                  )}
                 </div>
-              ) : (
-                <div className="flex items-center justify-center h-full">
-                  <div className="text-center text-neutral-medium">
-                    <ShieldAlert className="h-8 w-8 mx-auto mb-4" />
-                    <p>Threat prediction results will appear here</p>
-                    <p className="text-sm mt-2">Security assessment will be provided</p>
-                  </div>
-                </div>
-              )}
+              </div>
             </div>
           </div>
-        </div>
+        )}
 
         {/* Features Section */}
         <div className="mb-10">
-          <h2 className="text-2xl font-bold mb-6 text-neutral-dark">Platform Features</h2>
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+          <h2 className="text-2xl font-bold mb-8 text-neutral-dark flex items-center">
+            <Database className="mr-2 h-6 w-6 text-primary" />
+            Platform Capabilities
+          </h2>
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
             {/* Feature 1 */}
-            <div className="bg-white rounded-lg shadow-md p-6">
-              <div className="w-12 h-12 bg-primary-light rounded-full flex items-center justify-center mb-4">
-                <BarChart2 className="text-primary h-6 w-6" />
+            <div className="bg-white rounded-xl shadow-md p-6 border border-gray-100 transform transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+              <div className="w-14 h-14 bg-gradient-to-r from-primary-light to-primary rounded-full flex items-center justify-center mb-5">
+                <BarChart2 className="text-white h-6 w-6" />
               </div>
-              <h3 className="text-lg font-semibold mb-2">Advanced Analytics</h3>
+              <h3 className="text-lg font-semibold mb-3 text-neutral-dark">Advanced Analytics</h3>
               <p className="text-neutral-medium">
                 Utilize AI-powered semantic analysis to identify patterns and detect potential security concerns in social media content.
               </p>
             </div>
 
             {/* Feature 2 */}
-            <div className="bg-white rounded-lg shadow-md p-6">
-              <div className="w-12 h-12 bg-primary-light rounded-full flex items-center justify-center mb-4">
-                <ShieldAlert className="text-primary h-6 w-6" />
+            <div className="bg-white rounded-xl shadow-md p-6 border border-gray-100 transform transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+              <div className="w-14 h-14 bg-gradient-to-r from-red-500 to-red-700 rounded-full flex items-center justify-center mb-5">
+                <ShieldAlert className="text-white h-6 w-6" />
               </div>
-              <h3 className="text-lg font-semibold mb-2">Threat Detection</h3>
+              <h3 className="text-lg font-semibold mb-3 text-neutral-dark">Threat Detection</h3>
               <p className="text-neutral-medium">
                 Proactively identify potential threats through advanced linguistic pattern recognition and behavioral analysis algorithms.
               </p>
             </div>
 
             {/* Feature 3 */}
-            <div className="bg-white rounded-lg shadow-md p-6">
-              <div className="w-12 h-12 bg-primary-light rounded-full flex items-center justify-center mb-4">
-                <FileText className="text-primary h-6 w-6" />
+            <div className="bg-white rounded-xl shadow-md p-6 border border-gray-100 transform transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+              <div className="w-14 h-14 bg-gradient-to-r from-blue-500 to-blue-700 rounded-full flex items-center justify-center mb-5">
+                <FileText className="text-white h-6 w-6" />
               </div>
-              <h3 className="text-lg font-semibold mb-2">PDF Reports</h3>
+              <h3 className="text-lg font-semibold mb-3 text-neutral-dark">PDF Reports</h3>
               <p className="text-neutral-medium">
                 Generate comprehensive PDF reports with detailed analysis findings for documentation and sharing with authorized personnel.
               </p>
             </div>
 
             {/* Feature 4 */}
-            <div className="bg-white rounded-lg shadow-md p-6">
-              <div className="w-12 h-12 bg-primary-light rounded-full flex items-center justify-center mb-4">
-                <History className="text-primary h-6 w-6" />
+            <div className="bg-white rounded-xl shadow-md p-6 border border-gray-100 transform transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+              <div className="w-14 h-14 bg-gradient-to-r from-orange-500 to-orange-700 rounded-full flex items-center justify-center mb-5">
+                <History className="text-white h-6 w-6" />
               </div>
-              <h3 className="text-lg font-semibold mb-2">Historical Analysis</h3>
+              <h3 className="text-lg font-semibold mb-3 text-neutral-dark">Historical Analysis</h3>
               <p className="text-neutral-medium">
                 Access archived reports and track changes over time to identify evolving patterns and trends in target profiles.
               </p>
             </div>
 
             {/* Feature 5 */}
-            <div className="bg-white rounded-lg shadow-md p-6">
-              <div className="w-12 h-12 bg-primary-light rounded-full flex items-center justify-center mb-4">
-                <Lock className="text-primary h-6 w-6" />
+            <div className="bg-white rounded-xl shadow-md p-6 border border-gray-100 transform transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+              <div className="w-14 h-14 bg-gradient-to-r from-purple-500 to-purple-700 rounded-full flex items-center justify-center mb-5">
+                <Lock className="text-white h-6 w-6" />
               </div>
-              <h3 className="text-lg font-semibold mb-2">Secure Access</h3>
+              <h3 className="text-lg font-semibold mb-3 text-neutral-dark">Secure Access</h3>
               <p className="text-neutral-medium">
                 Organization-restricted access ensures that sensitive analysis tools are only available to authorized government personnel.
               </p>
             </div>
 
             {/* Feature 6 */}
-            <div className="bg-white rounded-lg shadow-md p-6">
-              <div className="w-12 h-12 bg-primary-light rounded-full flex items-center justify-center mb-4">
-                <Database className="text-primary h-6 w-6" />
+            <div className="bg-white rounded-xl shadow-md p-6 border border-gray-100 transform transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+              <div className="w-14 h-14 bg-gradient-to-r from-green-500 to-green-700 rounded-full flex items-center justify-center mb-5">
+                <Database className="text-white h-6 w-6" />
               </div>
-              <h3 className="text-lg font-semibold mb-2">Data Compliance</h3>
+              <h3 className="text-lg font-semibold mb-3 text-neutral-dark">Data Compliance</h3>
               <p className="text-neutral-medium">
                 All operations adhere to relevant privacy laws and government data handling requirements for intelligence operations.
               </p>

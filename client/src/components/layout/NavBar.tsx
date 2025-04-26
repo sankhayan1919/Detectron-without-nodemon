@@ -51,7 +51,7 @@ export default function NavBar() {
                   : 'text-neutral-medium hover:text-primary hover:bg-gray-100'
               }`}>
                 <Home className="h-4 w-4 mr-2" />
-                Dashboard
+                Home
               </a>
             </Link>
             
@@ -143,7 +143,7 @@ export default function NavBar() {
               <a className={`block py-3 px-4 rounded-md ${isActive('/') ? 'bg-primary-light text-primary' : 'text-neutral-medium hover:bg-gray-50'}`}>
                 <div className="flex items-center">
                   <Home className="h-5 w-5 mr-3" />
-                  Dashboard
+                  Home
                 </div>
               </a>
             </Link>

@@ -9,7 +9,7 @@ export default function HelpPage() {
             <div>
               <h3 className="text-xl font-semibold mb-3 text-neutral-dark">Platform Overview</h3>
               <p className="text-neutral-medium mb-4">
-                The Social Media Analysis Platform is designed for government agencies to analyze social media content for intelligence purposes.
+                The Detectron app is designed for government agencies like R&W, NIA, CBI, ED etc. to parse social media content like posts, account info etc.for intelligence purposes.
                 This tool provides semantic analysis and threat prediction capabilities to identify potential security concerns.
               </p>
             </div>
@@ -17,11 +17,12 @@ export default function HelpPage() {
             <div>
               <h3 className="text-xl font-semibold mb-3 text-neutral-dark">How to Use</h3>
               <ol className="list-decimal pl-5 space-y-2 text-neutral-medium">
-                <li>Enter your credentials and the target account information in the analysis form.</li>
-                <li>Input or paste the content you wish to analyze (posts, bio, or comments).</li>
+                <li>Enter your account credentials and the target account information in the analysis form.</li>
+                <li>Choose the content you wish to analyze (posts, bio etc.).</li>
                 <li>Click "Run Analysis" to process the content.</li>
                 <li>Review the generated reports in both the Semantic Analysis and Threat Prediction sections.</li>
                 <li>Download or save PDF reports for your records.</li>
+                <li>In the Archives section all the PDF s are stored with case ID, investigator's name and timestamp.</li>
               </ol>
             </div>
             
@@ -30,7 +31,7 @@ export default function HelpPage() {
               <div className="space-y-4">
                 <div>
                   <h4 className="font-medium text-neutral-dark">What types of content can I analyze?</h4>
-                  <p className="text-neutral-medium">The platform supports analysis of social media posts, user biographies, and comment sections.</p>
+                  <p className="text-neutral-medium">The platform supports analysis of social media posts, account info sections primarily.</p>
                 </div>
                 <div>
                   <h4 className="font-medium text-neutral-dark">How accurate is the threat prediction?</h4>
@@ -49,7 +50,7 @@ export default function HelpPage() {
                 For technical assistance, please contact the support team:
               </p>
               <ul className="list-disc pl-5 text-neutral-medium">
-                <li>Email: support@socialanalytics.gov</li>
+                <li>Email: sankhayan2004@gmail.com</li>
                 <li>Phone: (555) 123-4567</li>
                 <li>Hours: Monday-Friday, 8:00 AM - 5:00 PM EST</li>
               </ul>

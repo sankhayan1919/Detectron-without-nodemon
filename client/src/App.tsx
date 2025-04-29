@@ -13,7 +13,6 @@ import { ProtectedRoute } from "./lib/protected-route";
 import { AuthProvider } from "./hooks/use-auth";
 import NavBar from "./components/layout/NavBar";
 import Footer from "./components/layout/Footer";
-import ArchivesPage from "@/pages/archives-page"; // Added import
 
 function Router() {
   return (
@@ -23,7 +22,6 @@ function Router() {
       <Route path="/help" component={HelpPage} />
       <Route path="/contact" component={ContactPage} />
       <Route path="/privacy" component={PrivacyPage} />
-      <Route path="/archives" element={<ProtectedRoute><ArchivesPage /></ProtectedRoute>} /> {/* Added Archives route */}
       <Route component={NotFound} />
     </Switch>
   );

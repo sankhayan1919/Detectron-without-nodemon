@@ -1,0 +1,51 @@
+**Social Media Analysis Platform**  
+
+Our platform enforces strict access controls, encryption, and audit trails to protect sensitive data and ensure compliance.
+Only authorized government personnel can use the tool, with mandatory multi-factor authentication and role-based permissions. 
+
+1. Strict Access Controls
+Only authorized government personnel with .gov or agency-verified emails can register. Multi-factor authentication (MFA) is mandatory for all accounts.
+
+2. Role-Based Permissions
+Three-tier access: Analysts (submit cases), Supervisors (audit reports), Admins (manage users). Permissions align with operational hierarchy.
+
+3. Public Data Only
+Analysis restricted to publicly available content; private data requires warrant documentation. Automated scraping avoids platform ToS violations.
+
+4. End-to-End Encryption
+All data encrypted with AES-256 (at rest) and TLS 1.3 (in transit). PDFs include SHA-256 hashes for tamper-proofing.
+
+5. Immutable Audit Logs
+All actions (logins, report generation) logged to write-only storage. Logs include timestamps, user IDs, and IP addresses.
+
+6. Incident Response Protocol
+Breaches reported to agency CISO within 1 hour. Automated account freeze for suspicious activity (e.g., failed logins).
+
+7. Annual Compliance Checks
+Mandatory penetration testing and SOC 2 audits. Users retrained on security policies yearly.
+
+
+Terms of Use:-
+ 
+This platform is strictly for authorized government investigators conducting lawful social media analysis with proper legal authority. Users must comply with all security protocols and assume full responsibility for ensuring their investigative activities adhere to applicable laws and platform requirements.
+1. Authorized Users
+Restricted to verified government personnel with official agency credentials. All users must complete mandatory security training before access.
+
+2. Acceptable Use
+Only for lawful investigative purposes with proper legal authorization. Private account analysis requires valid warrants or court orders.
+
+3. Data Restrictions
+Analysis limited to publicly available content per platform terms. Users bear responsibility for ensuring legal data collection methods.
+
+4. Security Requirements
+Mandatory multi-factor authentication for all accounts. Sharing login credentials or bypassing security measures is strictly prohibited.
+
+5. Compliance & Monitoring
+All activity logged and auditable. Platform reserves right to suspend accounts for policy violations or suspicious behavior.
+
+6. Liability Disclaimer
+Tool provided "as-is" without warranties. Users assume full legal responsibility for their investigative actions and data sourcing.
+
+7. Policy Enforcement
+Violations may result in immediate account termination and reporting to agency supervisors. All disputes governed by federal laws.
+

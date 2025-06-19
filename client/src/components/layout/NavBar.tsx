@@ -1,18 +1,20 @@
 import { Link, useLocation } from "wouter";
 import { useAuth } from "@/hooks/use-auth";
 import { 
-  BarChart2, 
+  Mail, 
   Shield, 
   Menu, 
   X, 
   User, 
   LogOut, 
-  HelpCircle, 
+  Book, 
   Archive, 
   Home
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
+import logo from "@/images/logo.png";
+import appName from "@/images/app-name.png";
 
 export default function NavBar() {
   const [location] = useLocation();
@@ -28,16 +30,24 @@ export default function NavBar() {
   };
 
   return (
-    <header className="bg-white shadow-lg sticky top-0 z-50 transition-all duration-300 backdrop-blur-sm bg-white/95">
+    <header className="bg-blue-500 shadow-lg sticky top-0 z-50 transition-all duration-300 backdrop-blur-sm bg-white/95">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-20">
           <div className="flex items-center">
             <div className="flex-shrink-0 flex items-center">
-              <div className="flex items-center justify-center h-12 w-12 rounded-full bg-gradient-to-r from-primary to-primary-dark shadow-md text-white">
-                <Shield className="h-6 w-6" />
-              </div>
-              <span className="ml-3 text-xl font-bold text-neutral-dark">
-                <span className="text-primary">Secure</span>Analytics
+              {/* Logo */}
+              <img
+                src={logo}
+                alt="App Logo"
+                className="h-16 w-16" 
+              />
+              {/* App Name */}
+              <span className="ml-1 text-4xl font-bold text-neutral-dark">
+                <img
+                  src={appName}
+                  alt="App Name"
+                  className="h-24 w-60" 
+                />
               </span>
             </div>
           </div>
@@ -53,33 +63,38 @@ export default function NavBar() {
                 <Home className="h-4 w-4 mr-2" />
                 Home
               </a>
-            </Link>
+            </Link>           
             
-            <Link href="/help">
+            <Link href="/archives">
               <a className={`flex items-center px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200 ${
-                isActive('/help') 
+                isActive('/archives') 
                   ? 'text-primary bg-primary/10' 
                   : 'text-neutral-medium hover:text-primary hover:bg-gray-100'
               }`}>
-                <HelpCircle className="h-4 w-4 mr-2" />
-                Help Center
+                <Archive className="h-4 w-4 mr-2" />
+                Archives
+              </a>
+            </Link>    
+            
+            <Link href="/docs">
+              <a className={`flex items-center px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200 ${
+                isActive('/docs') 
+                  ? 'text-primary bg-primary/10' 
+                  : 'text-neutral-medium hover:text-primary hover:bg-gray-100'
+              }`}>
+                <Book className="h-4 w-4 mr-2" />
+                Docs
               </a>
             </Link>
-            
-            <div className="flex items-center px-4 py-3 rounded-lg text-sm font-medium text-neutral-medium cursor-pointer hover:text-primary hover:bg-gray-100 transition-all duration-200"
-                 onClick={(e) => { e.preventDefault(); alert('Analytics Archives will be implemented in a future update.'); }}>
-              <Archive className="h-4 w-4 mr-2" />
-              Archives
-            </div>
-            
+
             <Link href="/contact">
               <a className={`flex items-center px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200 ${
                 isActive('/contact') 
                   ? 'text-primary bg-primary/10' 
                   : 'text-neutral-medium hover:text-primary hover:bg-gray-100'
               }`}>
-                <BarChart2 className="h-4 w-4 mr-2" />
-                Analytics
+                <Mail className="h-4 w-4 mr-2" />
+                Contact Us
               </a>
             </Link>
             
@@ -147,28 +162,27 @@ export default function NavBar() {
                 </div>
               </a>
             </Link>
-            <Link href="/help">
-              <a className={`block py-3 px-4 rounded-md ${isActive('/help') ? 'bg-primary-light text-primary' : 'text-neutral-medium hover:bg-gray-50'}`}>
+            <Link href="/archives">
+              <a className={`block py-3 px-4 rounded-md ${isActive('/archives') ? 'bg-primary-light text-primary' : 'text-neutral-medium hover:bg-gray-50'}`}>
                 <div className="flex items-center">
-                  <HelpCircle className="h-5 w-5 mr-3" />
-                  Help Center
+                  <Book className="h-5 w-5 mr-3" />
+                  Archives
                 </div>
               </a>
             </Link>
-            <a href="#" 
-              className="block py-3 px-4 rounded-md text-neutral-medium hover:bg-gray-50"
-              onClick={(e) => { e.preventDefault(); alert('Analytics Archives will be implemented in a future update.'); }}
-            >
-              <div className="flex items-center">
-                <Archive className="h-5 w-5 mr-3" />
-                Archives
-              </div>
-            </a>
+            <Link href="/docs">
+              <a className={`block py-3 px-4 rounded-md ${isActive('/help') ? 'bg-primary-light text-primary' : 'text-neutral-medium hover:bg-gray-50'}`}>
+                <div className="flex items-center">
+                  <Book className="h-5 w-5 mr-3" />
+                  Docs
+                </div>
+              </a>
+            </Link>
             <Link href="/contact">
               <a className={`block py-3 px-4 rounded-md ${isActive('/contact') ? 'bg-primary-light text-primary' : 'text-neutral-medium hover:bg-gray-50'}`}>
                 <div className="flex items-center">
-                  <BarChart2 className="h-5 w-5 mr-3" />
-                  Analytics
+                  <Mail className="h-5 w-5 mr-3" />
+                  Contact Us
                 </div>
               </a>
             </Link>

@@ -1,6 +1,6 @@
 import { users, type User, type InsertUser, analysis, type Analysis, type InsertAnalysis, contactRequests, type ContactRequest, type InsertContactRequest } from "@shared/schema";
 import createMemoryStore from "memorystore";
-import session from "express-session";
+import session, { Store } from "express-session";
 
 const MemoryStore = createMemoryStore(session);
 
@@ -17,14 +17,14 @@ export interface IStorage {
   getContactRequests(): Promise<ContactRequest[]>;
   updateContactRequest(id: number, resolved: boolean): Promise<ContactRequest | undefined>;
   
-  sessionStore: session.SessionStore;
+  sessionStore: session.Store;
 }
 
 export class MemStorage implements IStorage {
   private users: Map<number, User>;
   private analyses: Map<number, Analysis>;
   private contactRequests: Map<number, ContactRequest>;
-  sessionStore: session.SessionStore;
+  sessionStore: session.Store;
   currentId: number;
   currentAnalysisId: number;
   currentContactRequestId: number;
@@ -53,14 +53,24 @@ export class MemStorage implements IStorage {
 
   async createUser(insertUser: InsertUser): Promise<User> {
     const id = this.currentId++;
-    const user: User = { ...insertUser, id };
+    const user: User = { 
+      ...insertUser, 
+      id, 
+      email: insertUser.email ?? null, 
+      orgCode: insertUser.orgCode ?? null 
+    };
     this.users.set(id, user);
     return user;
   }
 
   async createAnalysis(insertAnalysis: InsertAnalysis): Promise<Analysis> {
     const id = this.currentAnalysisId++;
-    const analysis: Analysis = { ...insertAnalysis, id };
+    const analysis: Analysis = { 
+      ...insertAnalysis, 
+      id, 
+      semanticAnalysis: insertAnalysis.semanticAnalysis ?? null, 
+      threatAnalysis: insertAnalysis.threatAnalysis ?? null 
+    };
     this.analyses.set(id, analysis);
     return analysis;
   }

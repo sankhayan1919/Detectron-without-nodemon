@@ -1,5 +1,7 @@
 import { Link } from "wouter";
 import { Shield, Globe, AlertTriangle, HelpCircle, MailPlus, FileText, Lock } from "lucide-react";
+import logo from "@/images/footer logo.jpg";
+import appName from "@/images/footer app-name.jpg";
 
 export default function Footer() {
   return (
@@ -9,17 +11,26 @@ export default function Footer() {
           {/* Logo & Description */}
           <div className="md:col-span-3">
             <div className="flex items-center">
-              <div className="flex items-center justify-center h-10 w-10 rounded-md bg-gradient-to-r from-primary to-primary-dark shadow-glow-sm">
-                <Shield className="h-5 w-5" />
+              <div className="flex items-center justify-center bg-gradient-to-r from-primary to-primary-dark shadow-glow-sm">
+              {/* Logo */}
+              <img
+                src={logo}
+                alt="App Logo"
+                className="h-16 w-16" 
+              />
               </div>
-              <span className="ml-3 text-xl font-bold text-white">
-                <span className="text-primary">Secure</span>Analytics
+              {/* App Name */}
+              <span className="ml-1 text-4xl font-bold text-neutral-dark">
+                <img
+                  src={appName}
+                  alt="App Name"
+                  className="h-16 w-40" 
+                />
               </span>
             </div>
             <p className="mt-4 text-gray-400 text-sm leading-relaxed">
-              A sophisticated platform for government agencies to analyze and monitor 
-              social media content with advanced threat detection and semantic analysis 
-              capabilities.
+              A sophisticated platform for government agencies to parse and analyze social
+              media content with advanced threat detection and semantic analysis capabilities.
             </p>
             <div className="mt-6 flex items-center">
               <div className="flex items-center justify-center h-8 w-8 rounded-full bg-gray-800 border border-gray-700">
@@ -38,7 +49,7 @@ export default function Footer() {
           </div>
           
           {/* Quick Links */}
-          <div className="md:col-span-5 grid grid-cols-1 sm:grid-cols-3 gap-8">
+          <div className="md:col-span-5 grid grid-cols-1 sm:grid-cols-3 gap-10">
             <div>
               <h3 className="text-sm font-semibold mb-5 uppercase tracking-wider text-gray-400 flex items-center">
                 <HelpCircle className="h-4 w-4 mr-2 text-primary" />
@@ -46,54 +57,25 @@ export default function Footer() {
               </h3>
               <ul className="space-y-3 text-sm">
                 <li>
-                  <Link href="/">
+                  <Link href="/archives">
                     <a className="text-gray-400 hover:text-primary transition-colors duration-200 block">
-                      Dashboard
+                      Archives
                     </a>
                   </Link>
                 </li>
                 <li>
-                  <a href="#" 
-                    className="text-gray-400 hover:text-primary transition-colors duration-200 block" 
-                    onClick={(e) => { e.preventDefault(); alert('Analytics Archives will be implemented in a future update.'); }}
-                  >
-                    Analytics Archives
-                  </a>
-                </li>
-                <li>
-                  <Link href="/help">
+                  <Link href="/docs">
                     <a className="text-gray-400 hover:text-primary transition-colors duration-200 block">
                       Documentation
                     </a>
                   </Link>
                 </li>
-              </ul>
-            </div>
-            
-            <div>
-              <h3 className="text-sm font-semibold mb-5 uppercase tracking-wider text-gray-400 flex items-center">
-                <MailPlus className="h-4 w-4 mr-2 text-primary" />
-                Support
-              </h3>
-              <ul className="space-y-3 text-sm">
                 <li>
                   <Link href="/contact">
                     <a className="text-gray-400 hover:text-primary transition-colors duration-200 block">
-                      Contact Support
+                      Contact Us
                     </a>
                   </Link>
-                </li>
-                <li>
-                  <Link href="/help">
-                    <a className="text-gray-400 hover:text-primary transition-colors duration-200 block">
-                      Knowledge Base
-                    </a>
-                  </Link>
-                </li>
-                <li>
-                  <a href="#" className="text-gray-400 hover:text-primary transition-colors duration-200 block">
-                    System Status
-                  </a>
                 </li>
               </ul>
             </div>
@@ -112,14 +94,18 @@ export default function Footer() {
                   </Link>
                 </li>
                 <li>
-                  <a href="#" className="text-gray-400 hover:text-primary transition-colors duration-200 block">
-                    Security Policy
-                  </a>
+                  <Link href="/security">
+                    <a href="#" className="text-gray-400 hover:text-primary transition-colors duration-200 block">
+                      Security Policy
+                    </a>
+                  </Link>
                 </li>
                 <li>
-                  <a href="#" className="text-gray-400 hover:text-primary transition-colors duration-200 block">
-                    Terms of Use
-                  </a>
+                  <Link href="/terms">
+                    <a className="text-gray-400 hover:text-primary transition-colors duration-200 block">
+                      Terms of Use
+                    </a>
+                  </Link>
                 </li>
               </ul>
             </div>
@@ -128,7 +114,7 @@ export default function Footer() {
         
         <div className="mt-12 pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center">
           <p className="text-sm text-gray-500">
-            &copy; {new Date().getFullYear()} SecureAnalytics Platform. All rights reserved.
+            &copy; {new Date().getFullYear()} Detectron Platform. All rights reserved.
           </p>
           
           <div className="flex items-center mt-4 md:mt-0">
